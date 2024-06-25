@@ -1,58 +1,94 @@
+<script setup>
+import { ref } from "vue";
+
+const msg = ref("Progress form");
+const steps = ref(["step 1", "step 2", "step 3"]);
+const currentStep = ref(0);
+
+const nextStep = () => {
+  if (currentStep.value < steps.value.length - 1) {
+    currentStep.value++;
+  }
+};
+
+const prevStep = () => {
+  if (currentStep.value > 0) {
+    currentStep.value--;
+  }
+};
+</script>
+
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <h1>{{ msg }}</h1>
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div
+        v-for="(step, index) in steps"
+        :key="index"
+        :class="{ 'step-active': index === currentStep }"
+      >
+        {{ step }}
+      </div>
+    </div>
+    <div class="controls">
+      <button @click="prevStep" :disabled="currentStep === 0" class="btn">
+        Previous
+      </button>
+      <button
+        @click="nextStep"
+        :disabled="currentStep === steps.length - 1"
+        class="btn"
+      >
+        Next
+      </button>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.progress-container {
+  max-width: 400px;
+  margin: 50px auto;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.progress-bar {
+  display: flex;
+  background-color: #eee;
+  border-radius: 8px;
+  overflow: hidden;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.progress-bar div {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  color: #fff;
+  position: relative;
+  z-index: 1;
 }
-a {
-  color: #42b983;
+.progress-bar div:not(:last-child) {
+  border-right: 2px solid #fff;
+}
+
+.step-active {
+  background-color: #af514c; /* Green for active step */
+}
+.controls {
+  margin-top: 20px;
+  text-align: center;
+}
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #673ab7; /* Purple for button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>
